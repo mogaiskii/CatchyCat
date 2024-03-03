@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://bsrsb0ocudpow"]
+
+[ext_resource type="PackedScene" uid="uid://lgf66ktinp54" path="res://Components/Bait/bait.tscn" id="1_5f4ae"]
+[ext_resource type="Script" path="res://Components/Rod/rod.gd" id="1_xn7l3"]
+[ext_resource type="PackedScene" uid="uid://7jnjre6ls02d" path="res://Components/Stick/stick.tscn" id="3_j2gkq"]
+[ext_resource type="Script" path="res://Components/Rod/Rope.gd" id="4_hp01k"]
+
+[node name="Rod" type="Node2D"]
+script = ExtResource("1_xn7l3")
+
+[node name="Bait" parent="." instance=ExtResource("1_5f4ae")]
+
+[node name="Stick" parent="." instance=ExtResource("3_j2gkq")]
+
+[node name="Rope" type="Node2D" parent="."]
+script = ExtResource("4_hp01k")
+
+[connection signal="moved" from="Bait" to="." method="_on_bait_moved"]
+[connection signal="moved" from="Bait" to="Rope" method="_on_bait_moved"]

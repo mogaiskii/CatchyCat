@@ -1,0 +1,73 @@
+[gd_scene load_steps=10 format=3 uid="uid://birbsd0x1phtk"]
+
+[ext_resource type="PackedScene" uid="uid://by314155h486d" path="res://Components/Cat/cat.tscn" id="1_2tnbo"]
+[ext_resource type="PackedScene" uid="uid://bsrsb0ocudpow" path="res://Components/Rod/rod.tscn" id="2_c8dfh"]
+[ext_resource type="AudioStream" uid="uid://dedx21v1qfvfv" path="res://Static/apple_cider.wav" id="3_jv5fc"]
+[ext_resource type="Script" path="res://BGMusic.gd" id="4_p7kko"]
+[ext_resource type="Texture2D" uid="uid://caj0x6u0syash" path="res://Static/room.png" id="5_j71k7"]
+[ext_resource type="Script" path="res://Components/UI/Control.gd" id="6_3on6q"]
+[ext_resource type="Texture2D" uid="uid://mvfk0xcuivvm" path="res://Static/play.png" id="6_x6tae"]
+[ext_resource type="Texture2D" uid="uid://cm0yjsg7x52u3" path="res://Static/replay.png" id="7_adlec"]
+[ext_resource type="Script" path="res://Components/UI/ReplayButton.gd" id="8_eka1v"]
+
+[node name="Room" type="Node2D"]
+
+[node name="BGTexture" type="TextureRect" parent="."]
+offset_right = 840.0
+offset_bottom = 600.0
+texture = ExtResource("5_j71k7")
+
+[node name="Cat" parent="." instance=ExtResource("1_2tnbo")]
+position = Vector2(172, 308)
+TOP_BOUND = 108
+LEFT_BOUND = 108
+RIGHT_BOUND = 738
+BOTTOM_BOUND = 540
+
+[node name="Rod" parent="." instance=ExtResource("2_c8dfh")]
+TOP_BOUND = 108
+LEFT_BOUND = 108
+RIGHT_BOUND = 738
+BOTTOM_BOUND = 540
+
+[node name="BGMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_jv5fc")
+autoplay = true
+script = ExtResource("4_p7kko")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_3on6q")
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 0
+offset_right = 840.0
+offset_bottom = 600.0
+
+[node name="PlayButton" type="TextureButton" parent="Control/CenterContainer"]
+layout_mode = 2
+texture_normal = ExtResource("6_x6tae")
+texture_pressed = ExtResource("6_x6tae")
+texture_hover = ExtResource("6_x6tae")
+texture_focused = ExtResource("6_x6tae")
+
+[node name="ReplayButton" type="TextureButton" parent="Control/CenterContainer"]
+layout_mode = 2
+texture_normal = ExtResource("7_adlec")
+texture_pressed = ExtResource("7_adlec")
+texture_hover = ExtResource("7_adlec")
+texture_focused = ExtResource("7_adlec")
+script = ExtResource("8_eka1v")
+
+[connection signal="cat_wins" from="Cat" to="Control" method="_on_cat_win"]
+[connection signal="bait_moved" from="Rod" to="Cat" method="_on_bait_moved"]
+[connection signal="finished" from="BGMusic" to="BGMusic" method="_on_finished"]
+[connection signal="game_end" from="Control" to="Rod" method="_on_game_end"]
+[connection signal="game_end" from="Control" to="Control/CenterContainer/ReplayButton" method="_on_game_end"]
+[connection signal="game_reset" from="Control" to="Cat" method="_on_game_reset"]
+[connection signal="game_start" from="Control" to="Rod" method="_on_game_start"]
+[connection signal="pressed" from="Control/CenterContainer/PlayButton" to="Control" method="_on_game_start"]
+[connection signal="pressed" from="Control/CenterContainer/ReplayButton" to="Control" method="_on_game_restart"]
